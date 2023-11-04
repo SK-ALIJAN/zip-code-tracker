@@ -27,6 +27,25 @@ const ZipCodeProvider = ({ children }) => {
     }
   };
 
+
+    const fetchLocationFromCoordinates = async (lat, lon) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data for current location");
+      }
+      const data = await response.json();
+      // setPostalCode(data.address.postcode);
+      fetchLocationInfo(data.address.postcode);
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
   const clearLocationInfo = () => {
     setLocationInfo(null);
   };
@@ -42,6 +61,7 @@ const ZipCodeProvider = ({ children }) => {
         loading,
         error,
         fetchLocationInfo,
+  
         clearLocationInfo,
         clearError,
       }}
